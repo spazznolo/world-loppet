@@ -9,9 +9,9 @@ options(timeout= 10000000000)
 missing_events = read_csv('missing_events.csv')
 
 # run get_race_results for desired events
-for (event_id in missing_events$event_id) {
+for (event_id in missing_events$x) {
   
-  for (page_number in 1:150) {
+  for (page_number in 1:20) {
     
     # update progress
     message('Retrieving Page ',page_number,' of Event ',event_id)
@@ -46,6 +46,7 @@ for (event_id in missing_events$event_id) {
   
 }
 
+missed_results %<>% arrange(time) %>% group_by(id) %>% mutate(Position=order(time))
 
 # save tournament results
 write.csv(missed_results,'missed_results.csv',row.names=FALSE)
